@@ -1,0 +1,64 @@
+---
+title: "How to pull Crypto Currency Prices in R"
+author: "Sachin Sharma"
+date: "11/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# First we need to install package coinmarketcapr and development version can be installed via github with the help of following code 
+
+```{r}
+#install.packages("coinmarketcapr")
+#devtools::install_github("amrrs/coinmarketcapr")
+library(tidyverse)
+```
+# How to get the list of the Cryptocurrencies
+```{r}
+
+library(coinmarketcapr)
+key <- "XXXXXX" # Here you have to enter the API key from coinmarket cap which you can create after creating log in 
+
+coinmarketcapr::setup(key)
+
+cryptos <- get_crypto_listings( limit=50)
+
+head(cryptos)
+
+
+```
+
+
+# Get list of cryptocurrencies in the market 
+
+```{r}
+
+marketcap <- get_global_marketcap()
+
+head(marketcap)
+
+```
+# How to get the Cryptocurrency Prices , we are interested in the top 10 cryptos 
+
+```{r}
+
+
+
+cryptos %>% head(10) %>%  select(c("id","name","symbol", "USD_price")) -> top10
+
+cryptos
+
+```
+# Some graphical representation 
+
+
+
+```{r}
+library(ggplot2)
+
+ggplot(data = cryptos)+ geom_col(aes(x = name , y = USD_price))
+```
+
